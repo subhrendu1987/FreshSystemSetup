@@ -18,14 +18,30 @@ function unsetproxy() {
 
 #gping
 function gping(){
-    IFS=($(ip a | grep -o '^[[:digit:]]*[:][[:alnum:][:space:]]*:'| awk -F  ':' '/1/ {print $2}'|tr -d ' '))
-    ips=($(hostname -I))
-    for ip in "${ips[@]}"
-    do
-        echo $ip
-    done
-    for %%i in 200 to 254 do ping 10.1.1.%%i 
+    #ips=($(hostname -I))
+    #for ip in "${ips[@]}"
+    #do
+    #    echo $ip
+    #done
+    #for %%i in 200 to 254 do ping 10.1.1.%%i
+    #done
 
+    IFS=($(ip a | grep -o '^[[:digit:]]*[:][[:alnum:][:space:]]*:'| awk -F  ':' '/1/ {print $2}'|tr -d ' '))
+    for iface in "${IFS[@]}"
+    do
+        ip_mask=($(ip -f inet addr show $iface | grep inet|awk -F' ' '{print $2}'))  ### IP address with subnet mask
+        #ip=$(echo $ip_mask |awk -F'/' '{print $2}')); mask=$2
+        all_ips=($(nmap -sL -n $ip_mask | awk '/Nmap scan report/{print $NF}'))
+        for target in "${all_ips[@]}"
+        do
+            ping $target -c1 2>&1 >/dev/null
+            #op=($(ping $target -c1))
+            rc=$?
+            if [[ $rc -eq 0 ]] ; then
+                echo $target" is reachable via "$iface
+            fi
+        done
+    done
 }
 ```
 ### Add the following lines to /etc/apt/apt.conf
