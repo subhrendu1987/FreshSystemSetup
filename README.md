@@ -57,5 +57,5 @@ sudo apt update
 sudo apt install openssh-server git -y
 ## Useful network-tools
 sudo apt install nmap lynx traceroute net-tools -y
-
+sudo apt install ubuntu-desktop -y
 ```
