@@ -43,6 +43,8 @@ function gping(){
         done
     done
 }
+
+setproxy
 ```
 ### Add the following lines to /etc/apt/apt.conf
 ```
