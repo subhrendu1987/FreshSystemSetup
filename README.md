@@ -82,6 +82,26 @@ sudo systemctl restart docker
 sudo systemctl show --property=Environment docker
 ```
 
+## Remote Desktop
+```
+sudo apt install tightvncserver
+vncserver 
+vncserver -kill :1
+mv ~/.vnc/xstartup ~/.vnc/xstartup.bak
+```
+Now add the following lines in `~/.vnc/xstartup`
+```
+#!/bin/bash
+xrdb $HOME/.Xresources
+startxfce4 &
+```
+
+```
+chmod +x ~/.vnc/xstartup
+vncserver 
+nmap
+nmap 127.0.0.1
+```
 
 
 ## Use the following commands
