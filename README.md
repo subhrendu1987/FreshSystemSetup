@@ -51,6 +51,32 @@ setproxy
 Acquire::http::Proxy "http://172.27.10.67:3128/";
 Acquire::https::Proxy "http://172.27.10.67:3128/";
 ```
+## Docker proxy
+### Add user specific settings
+Edit/Create `~/.docker/config` and add the following lines
+```
+{
+ "proxies":
+ {
+   "default":
+   {
+     "httpProxy": "http://172.27.10.67:3128",
+     "httpsProxy": "http://172.27.10.67:3128",
+     "noProxy": "172.27.0.0/16,127.0.0.0/8"
+   }
+ }
+}
+```
+### Add daemon specific settings
+Create `sudo mkdir -p /etc/systemd/system/docker.service.d`. Now create/edit `/etc/systemd/system/docker.service.d/http-proxy.conf` and add following lines
+```
+[Service]
+Environment="HTTP_PROXY=http://172.27.10.67:3128"
+Environment="HTTPS_PROXY=http://172.27.10.67:3128"
+Environment="NO_PROXY=localhost,127.0.0.1"
+```
+
+
 
 ## Use the following commands
 ```
