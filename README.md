@@ -75,10 +75,11 @@ Environment="HTTP_PROXY=http://172.27.10.67:3128"
 Environment="HTTPS_PROXY=http://172.27.10.67:3128"
 Environment="NO_PROXY=localhost,127.0.0.1"
 ```
-Use the following commands to reload the docker service
+Use the following commands to reload the docker service and verify the settings
 ```
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+sudo systemctl show --property=Environment docker
 ```
 
 
