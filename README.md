@@ -34,12 +34,15 @@ function gping(){
         all_ips=($(nmap -sL -n $ip_mask | awk '/Nmap scan report/{print $NF}'))
         for target in "${all_ips[@]}"
         do
-            ping $target -c1 2>&1 >/dev/null
+            echo "Testing "$target
+            #ping $target -c1 2>&1 >/dev/null
+            ping $target -c1
             #op=($(ping $target -c1))
             rc=$?
             if [[ $rc -eq 0 ]] ; then
                 echo $target" is reachable via "$iface
             fi
+            sleep 1
         done
     done
 }
@@ -57,5 +60,6 @@ sudo apt update
 sudo apt install openssh-server git -y
 ## Useful network-tools
 sudo apt install nmap lynx traceroute net-tools -y
-
+## Kernel headers
+sudo apt install linux-headers-$(uname -r)
 ```
