@@ -43,11 +43,14 @@ function gping(){
             rc=$?
             if [[ $rc -eq 0 ]] ; then
                 echo $target" is reachable via "$iface
-                reachabilty[$iface]+=$target
+                reachabilty[$iface]+="$target"
             fi
             #sleep 1
         done
+    echo "Reachability from: " $iface
+    echo ${reachabilty[@]}
     done
+    
 }
 
 setproxy
