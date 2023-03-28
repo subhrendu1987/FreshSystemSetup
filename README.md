@@ -34,34 +34,12 @@ function gping(){
     for iface in "${IPS[@]}"
     do
         ip_mask=($(ip -f inet addr show $iface | grep inet|awk -F' ' '{print $2}'))  ### IP address with subnet mask
-        #ip=$(echo $ip_mask |awk -F'/' '{print $2}')); mask=$2
-        readarray -t all_ips <<< "$(nmap -sL -n $ip_mask | awk '/Nmap scan report/{print $NF}')"
-        declare -a reachabilty[$iface]
-        for target in "${all_ips[@]}"
-        do
-            echo "Testing "$target
-            #ping $target -c1 2>&1 >/dev/null
-            ping $target -c1
-            #op=($(ping $target -c1))
-            rc=$?
-            if [[ $rc -eq 0 ]] ; then
-                echo $target" is reachable via "$iface
-                reachabilty[$iface]+="$target"
-            fi
-            #sleep 1
-        done
-    echo "Reachability from: " $iface
-    echo ${reachabilty[@]}
+        echo "Using "$iface": "$ip_mask 
+        nmap -sP $ip_mask
     done
-    
 }
 
 setproxy
-```
-### Add the following lines to /etc/apt/apt.conf
-```
-Acquire::http::Proxy "http://172.27.10.67:3128/";
-Acquire::https::Proxy "http://172.27.10.67:3128/";
 ```
 ## Docker proxy
 ### Add user specific settings
