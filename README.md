@@ -9,6 +9,8 @@ function setproxy() {
     sudo snap set system proxy.http="http://172.27.10.67:3128"
     echo "Acquire::http::Proxy \"http://172.27.10.67:3128/\";" | sudo tee -a /etc/apt/apt.conf
     echo "Acquire::https::Proxy \"http://172.27.10.67:3128/\";" | sudo tee -a /etc/apt/apt.conf
+    git config --global http.proxy http://172.27.10.67:3128
+    git config --global https.proxy http://172.27.10.67:3128
 }
 
 # Unset Proxy
@@ -17,6 +19,8 @@ function unsetproxy() {
     sudo snap set system proxy.http=""
     sudo snap set system proxy.http=""
     sudo sed -i '/^Acquire::http/d' /etc/apt/apt.conf
+    git config --global --unset http.proxy
+    git config --global --unset https.proxy
 }
 
 #gping
