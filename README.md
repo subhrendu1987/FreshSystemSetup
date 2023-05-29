@@ -25,13 +25,7 @@ function unsetproxy() {
 
 #gping
 function gping(){
-    #ips=($(hostname -I))
-    #for ip in "${ips[@]}"
-    #do
-    #    echo $ip
-    #done
-    #for %%i in 200 to 254 do ping 10.1.1.%%i
-    #done
+    #nmap -sP 208.109.192.1-255
     IFS=$'\n'
     declare -A reachability
     readarray -t IPS <<< "$(ip a | grep -o '^[[:digit:]]*[:][[:alnum:][:space:]]*:'| awk -F  ':' '/1/ {print $2}'|tr -d ' ')"
