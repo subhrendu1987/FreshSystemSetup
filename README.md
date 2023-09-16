@@ -98,7 +98,7 @@ sudo apt update
 ## Useful packages
 sudo apt install openssh-server git -y
 ## Useful network-tools
-sudo apt install nmap lynx traceroute net-tools iputils-ping telnet iptables curl wget -y
+sudo apt install nmap lynx traceroute net-tools iputils-ping telnet iptables curl wget  nmap -y
 ## Kernel headers
 sudo apt install linux-headers-$(uname -r)
 sudo apt install ubuntu-desktop -y
