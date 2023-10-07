@@ -22,7 +22,23 @@ function unsetproxy() {
     git config --global --unset http.proxy
     git config --global --unset https.proxy
 }
-
+#####-------------------------------------------------------#####
+function gettemp() {
+    paste <(cat /sys/class/thermal/thermal_zone*/type) <(cat /sys/class/thermal/thermal_zone*/temp) | column -s $'\t' -t | sed 's/\(.\)..$/.\1°C/'
+}
+#####-------------------------------------------------------#####
+function gettopcpu(){
+    ps aux --sort -%cpu | head -2
+}
+#####-------------------------------------------------------#####
+function execute_with_timestamp() {
+    local cmd="$1"
+    while true; do
+        echo "<$(date '+%Y-%m-%d %H:%M:%S')>\n  $(eval $cmd)"
+        sleep 1
+    done
+}
+#####-------------------------------------------------------#####
 #gping
 function gping(){
     #nmap -sP 208.109.192.1-255
