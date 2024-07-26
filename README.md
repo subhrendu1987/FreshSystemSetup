@@ -160,3 +160,59 @@ ssh -L <FWD_PORT>:<INT_IP>:6081 -p <PUB_SSH_PORT> <PUB_IP> -l gateway -N
 # Firefox:
 http://localhost:<FWD_PORT>/vnc.html
 ```
+# GUI with noVNC and TigerVNC
+## Install and configure server
+Use the following commands
+```
+sudo apt install tigervnc-standalone-server tigervnc-xorg-extension tigervnc-viewer -y
+sudo apt install ubuntu-gnome-desktop -y
+sudo systemctl enable gdm
+sudo systemctl start gdm
+nano ~/.vnc/xstartup
+```
+Add the following at the end of file
+```
+#####
+[ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+[ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+vncconfig -iconic &
+dbus-launch --exit-with-session gnome-session &
+##############################
+```
+Use the following commands
+```
+vncserver 
+## Check VNC server
+pgrep Xtigervnc
+ss -tulpn | grep -E -i 'vnc|590'
+telnet 127.0.0.1 5902
+novnc --listen 6081 --vnc localhost:5902
+```
+## Connect to the server over SSH tunnel
+### Scenario
+```
+                      ┌───────────┐                                        
+                      │           │Internal Network Facing Interface       
+                      │    PUB    ├─────────────────────────────────────┐  
+                      │           │                                     │  
+                      └────┬──────┘                                     │  
+                           │                                            │  
+             Public Facing │Interface                                   │  
+                           │                                            │  
+                           │                                         ┌──┴─┐
+                           │                                         │INT │
+                        ┌──┴─────┐                                   │    │
+                        │Internet│                                   └────┘
+                        └────────┘                                         
+```
+Select a VNC service forwarding port (i.e. <FWD_PORT>)
+### Relevant Commands
+```
+# Terminal-1:
+ssh -J <PUB_Uname>@<PUB_IP>:<PUB_SSH_PORT>  <INT_Uname>@<INT_IP>
+novnc --listen 6081 --vnc localhost:5901
+# Terminal-2:
+ssh -L <FWD_PORT>:<INT_IP>:6081 -p <PUB_SSH_PORT> <PUB_IP> -l gateway -N
+# Firefox:
+http://localhost:<FWD_PORT>/vnc.html
+```
