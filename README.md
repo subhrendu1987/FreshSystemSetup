@@ -119,3 +119,44 @@ sudo apt install nmap lynx traceroute net-tools iputils-ping telnet iptables cur
 sudo apt install linux-headers-$(uname -r)
 sudo apt install ubuntu-desktop -y
 ```
+
+# GUI with noVNC and TightVNC
+## Install and configure server
+```
+sudo apt update
+sudo apt install xfce4 xfce4-goodies
+sudo apt install tightvncserver
+vncserver
+sudo snap install novnc
+sudo snap set novnc services.n6082.listen=6082 services.n6082.vnc=localhost:5901
+sudo snap get novnc services.n6082
+novnc --listen 6081 --vnc localhost:5901
+```
+## Connect to the server over SSH tunnel
+### Scenario
+```
+                      ┌───────────┐                                        
+                      │           │Internal Network Facing Interface       
+                      │    PUB    ├─────────────────────────────────────┐  
+                      │           │                                     │  
+                      └────┬──────┘                                     │  
+                           │                                            │  
+             Public Facing │Interface                                   │  
+                           │                                            │  
+                           │                                         ┌──┴─┐
+                           │                                         │INT │
+                        ┌──┴─────┐                                   │    │
+                        │Internet│                                   └────┘
+                        └────────┘                                         
+```
+Select a VNC service forwarding port (i.e. <FWD_PORT>)
+### Relevant Commands
+```
+# Terminal-1:
+ssh -J <PUB_Uname>@<PUB_IP>:<PUB_SSH_PORT>  <INT_Uname>@<INT_IP>
+novnc --listen 6081 --vnc localhost:5901
+# Terminal-2:
+ssh -L <FWD_PORT>:<INT_IP>:6081 -p <PUB_SSH_PORT> <PUB_IP> -l gateway -N
+# Firefox:
+http://localhost:<FWD_PORT>/vnc.html
+```
