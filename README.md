@@ -2,15 +2,17 @@
 ## Proxy settings for IDRBT
 ### Add the following lines to ~/.bashrc
 ```
-# Set Proxy
+PROXY_IP="172.27.10.94"
+#PROXY_IP="172.27.10.67"
+PROXY_PORT="3128"
+
 function setproxy() {
-    export {http,https,ftp,HTTP,HTTPS}_proxy="http://172.27.10.67:3128/"
-    sudo snap set system proxy.http="http://172.27.10.67:3128"
-    sudo snap set system proxy.http="http://172.27.10.67:3128"
-    echo "Acquire::http::Proxy \"http://172.27.10.67:3128/\";" | sudo tee -a /etc/apt/apt.conf
-    echo "Acquire::https::Proxy \"http://172.27.10.67:3128/\";" | sudo tee -a /etc/apt/apt.conf
-    git config --global http.proxy http://172.27.10.67:3128
-    git config --global https.proxy http://172.27.10.67:3128
+    export {http,https,ftp,HTTP,HTTPS}_proxy="http://"$PROXY_IP":"$PROXY_PORT"/"
+    sudo snap set system proxy.http="http://"$PROXY_IP":"$PROXY_PORT
+    echo "Acquire::http::Proxy \"http://"$PROXY_IP":"$PROXY_PORT"/\";" | sudo tee -a /etc/apt/apt.conf
+    echo "Acquire::https::Proxy \"http://"$PROXY_IP":"$PROXY_PORT"/\";" | sudo tee -a /etc/apt/apt.conf
+    git config --global http.proxy "http://"$PROXY_IP":"$PROXY_PORT
+    git config --global https.proxy "http://"$PROXY_IP":"$PROXY_PORT
 }
 
 # Unset Proxy
